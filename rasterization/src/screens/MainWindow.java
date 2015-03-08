@@ -1,71 +1,65 @@
 package screens;
 
-/* 
- * UNICAP
- * Guilherme Caraciolo 201210799-5
- * Atividade 1 - Desenhar um triangulo em OpenGL
- * Foi usando JOGL
- */
+import java.util.ArrayList;
 
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLProfile;
-import javax.media.opengl.awt.GLCanvas;
-import javax.swing.JFrame;
 
-public class MainWindow extends JFrame implements GLEventListener  {
-    private static final long serialVersionUID = 1L;
-	private String title;
-	private int width;
-	private int height;
+import model.Line;
+import model.Model;
+import model.Point2D;
+import model.Triangulo;
+
+public class MainWindow implements GLEventListener{
 	
-    public MainWindow(String title, int width, int height, boolean visible) {
-    	super(title);
-    	GLProfile profile = GLProfile.get(GLProfile.GL2);
-        GLCapabilities capabilities = new GLCapabilities(profile);
-        GLCanvas canvas = new GLCanvas(capabilities);
-        canvas.addGLEventListener(this);
-        this.getContentPane().add(canvas);
-        
-    	this.title = title;
-        this.width = width;
-        this.height = height;        
-        
-        this.setName(this.title);        
-        this.setSize(this.width, this.height);
-        this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(visible);
-        this.setResizable(false);
-                
-        canvas.requestFocusInWindow();
-    	
-    }
-    
-    @Override
-    public void display(GLAutoDrawable drawable) {
-    	GL2 gl = drawable.getGL().getGL2();
-        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-        
-        gl.glFlush();
-    }
+	private ArrayList<Model> models;
+		
+	public MainWindow() {
+		super();
+		models = new ArrayList<Model>();	
+		Line l = new Line(new Point2D(0.0f, 0.75f), new Point2D(-0.75f, 0f));
+		Line l2 = new Line(new Point2D(-0.75f, 0f), new Point2D(0f, -0.75f));
+		this.models.add(l);
+		this.models.add(l2);
+		
+		Triangulo t = new Triangulo(new Point2D(0,0), new Point2D(-1,-1), new Point2D(1,1));
+		this.models.add(t);
+	}
+	
+	
+	@Override
+	public void display(GLAutoDrawable drawable) {
+		
+		final GL2 gl = drawable.getGL().getGL2();
+		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); 
+		gl.glLoadIdentity();				
+		for (Model model : this.models) {
+			model.draw(gl);
+			gl.glFlush();
+		}	       
+		
+	}
 
-    @Override
-    public void dispose(GLAutoDrawable drawable) {
-    }
+	@Override
+	public void dispose(GLAutoDrawable drawable) {
+		final GL2 gl = drawable.getGL().getGL2();
+		
+	}
 
-    @Override
-    public void init(GLAutoDrawable drawable) {
-    	 GL2 gl = drawable.getGL().getGL2();
-         gl.glClearColor(1, 1, 1, 1);
-    }
+	@Override
+	public void init(GLAutoDrawable drawable) {
+		final GL2 gl = drawable.getGL().getGL2();
+		gl.glClearColor(0, 0, 0, 1);
+	}
 
-    @Override
-    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-    	
-    }
-        
+	@Override
+	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {	
+		final GL2 gl = drawable.getGL().getGL2();		
+		
+	}
+	
+	
+	
+
 }
