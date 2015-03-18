@@ -3,6 +3,8 @@ package model;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
+import com.jogamp.graph.geom.Triangle;
+
 
 public class Triangulo extends Model {
 	
@@ -14,6 +16,10 @@ public class Triangulo extends Model {
 		this.p3 = p3;
 	}
 	
+	public Triangulo(Triangle triangle) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void draw(final GL2 gl){	
 		gl.glBegin(GL.GL_TRIANGLE_FAN);
 		gl.glColor3f(1, 0, 0);

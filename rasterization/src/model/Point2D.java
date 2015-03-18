@@ -1,6 +1,8 @@
 package model;
 
-public class Point2D {
+import javax.media.opengl.GL2;
+
+public class Point2D extends Model {
 	private float x;
 	private float y;
 	
@@ -25,4 +27,15 @@ public class Point2D {
 		this.y = y;
 	}
 
+	@Override
+	public void draw(GL2 gl) {
+		gl.glBegin (GL2.GL_POINTS);
+		
+		gl.glPointParameteri(GL2.GL_POINT_SPRITE_COORD_ORIGIN, GL2.GL_LOWER_LEFT);
+		gl.glPointSize(GL2.GL_POINT_SIZE_MAX);
+		gl.glVertex3f( x,  y, 0);		
+		gl.glEnd();
+		
+	}
+	
 }

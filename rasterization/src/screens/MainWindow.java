@@ -1,65 +1,102 @@
 package screens;
 
-import java.util.ArrayList;
+import java.awt.event.MouseEvent;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLEventListener;
+import javax.media.opengl.awt.GLCanvas;
+import javax.media.opengl.glu.GLU;
 
-import model.Line;
-import model.Model;
+import model.CartesianPlane2D;
 import model.Point2D;
-import model.Triangulo;
 
-public class MainWindow implements GLEventListener{
+import com.jogamp.opengl.util.FPSAnimator;
+
+import event.JoglEventListener;
+
+public class MainWindow extends JoglEventListener {
+
+	public static int FPS = 60;
 	
-	private ArrayList<Model> models;
 		
-	public MainWindow() {
-		super();
-		models = new ArrayList<Model>();	
-		Line l = new Line(new Point2D(0.0f, 0.75f), new Point2D(-0.75f, 0f));
-		Line l2 = new Line(new Point2D(-0.75f, 0f), new Point2D(0f, -0.75f));
-		this.models.add(l);
-		this.models.add(l2);
+	public MainWindow(GLCanvas canvas, boolean animated) {
+		super(canvas);		
+		if (animated) {
+        	FPSAnimator animator = new FPSAnimator(canvas, FPS);        
+            animator.start();  
+		}   
 		
-		Triangulo t = new Triangulo(new Point2D(0,0), new Point2D(-1,-1), new Point2D(1,1));
-		this.models.add(t);
 	}
 	
 	
 	@Override
-	public void display(GLAutoDrawable drawable) {
-		
-		final GL2 gl = drawable.getGL().getGL2();
-		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); 
-		gl.glLoadIdentity();				
-		for (Model model : this.models) {
-			model.draw(gl);
-			gl.glFlush();
-		}	       
+	public void display(GLAutoDrawable drawable) 
+	{
+		GL2 gl = drawable.getGL().getGL2();
+		showMouseCoordinate(drawable, super.getMouse(), super.getGlu());	
+		//new CartesianPlane2D().draw(gl);
+	}
+
+	@Override
+	public void dispose(GLAutoDrawable drawable) 
+	{
+		GL2 gl = drawable.getGL().getGL2();
+		System.out.println("dispose");
+	}
+
+	@Override
+	public void init(GLAutoDrawable drawable) 
+	{
+		GL2 gl = drawable.getGL().getGL2();
+		System.out.println("init");
 		
 	}
 
 	@Override
-	public void dispose(GLAutoDrawable drawable) {
-		final GL2 gl = drawable.getGL().getGL2();
+	public void reshape(GLAutoDrawable drawable, 
+										  int x, 
+										  int y, 
+										  int width,
+										  int height) 
+	{
+		
+		GL2 gl = drawable.getGL().getGL2();
+		gl.glViewport(0, 0, width, height);
+	    gl.glMatrixMode(GL2.GL_PROJECTION);
+	    gl.glLoadIdentity();
+	    super.getGlu().gluPerspective(45.0, (float) width / (float) height, 1.0, 100.0);
+	    gl.glMatrixMode(GL2.GL_MODELVIEW);
+	    gl.glLoadIdentity();
 		
 	}
-
-	@Override
-	public void init(GLAutoDrawable drawable) {
-		final GL2 gl = drawable.getGL().getGL2();
-		gl.glClearColor(0, 0, 0, 1);
+	
+	public void showMouseCoordinate(GLAutoDrawable drawable, MouseEvent mouse, GLU glu) {
+		GL2 gl = drawable.getGL().getGL2();
+		int viewport[] = new int[4];
+	    double mvmatrix[] = new double[16];
+	    double projmatrix[] = new double[16];
+		    
+	    if (mouse != null)
+	    {
+		      int x = mouse.getX(), y = mouse.getY();
+		      switch (mouse.getButton()) {
+		        case MouseEvent.BUTTON1:
+		          gl.glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);
+		          gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, mvmatrix, 0);
+		          gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projmatrix, 0);
+		          /* note viewport[3] is height of window in pixels */
+		          y = viewport[3] - (int) y - 1;
+		          System.out.println("Coordinates at cursor are (" + x + ", " + y + ")");
+		          
+		          
+		          new Point2D(x, y).draw(gl);
+	
+		          break;
+		        case MouseEvent.BUTTON2:
+		          break;
+		      }
+		 }
 	}
-
-	@Override
-	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {	
-		final GL2 gl = drawable.getGL().getGL2();		
-		
-	}
 	
-	
-	
-
 }
