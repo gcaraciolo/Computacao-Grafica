@@ -1,7 +1,12 @@
 package model2D;
 
+import java.awt.Color;
 import java.awt.Frame;
-import java.awt.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -14,14 +19,25 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.glu.GLU;
-
-import com.jogamp.opengl.util.FPSAnimator;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JPanel;
 
 import model.Model;
 import model.Point2D;
 import model.Triangulo;
 
-public class Window2D implements GLEventListener{
+import com.jogamp.opengl.util.FPSAnimator;
+
+public class Window2D extends JFrame implements GLEventListener, 
+												  MouseListener, 
+											MouseMotionListener{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	//GL
 	private GLProfile profile;
@@ -34,16 +50,21 @@ public class Window2D implements GLEventListener{
 	//datas
 	private String title;
 	public static int FPS = 60;
+	FPSAnimator animator;
 	
 	private ArrayList<Model> polygons;
+	private JPanel menu;
+	private JButton btnTriangulo;
+	private JButton btnQuadrado;
+	private JList list;
 	
 	public Window2D(String title, int width, int height) {
+		setBackground(Color.YELLOW);
 		this.title = title;
 		this.glu = new GLU();
 		this.polygons = new ArrayList<>();
-		initFrame(width, height);
-		
-		objetos(); //add objects to be draw
+			
+		initFrame(width, height);		
 	}
 
 	@Override
@@ -67,7 +88,7 @@ public class Window2D implements GLEventListener{
 		GL2 gl = drawable.getGL().getGL2();
 		
 	}
-
+	
 	@Override
 	public void reshape(GLAutoDrawable drawable, 
 								    int x, 
@@ -81,28 +102,62 @@ public class Window2D implements GLEventListener{
 	}
 	
 	private void initFrame(int width, int height) {
-		initGL();
+		initGL(width, height);
 		
-		frame = new Frame(title);
-        frame.setSize(width, height);
-        frame.add(canvas); //need to be after initialize GL, to add canvas listener
-        frame.addWindowListener(new WindowAdapter() {
+		//frame = new Frame(title);
+        setSize(800, 600);
+        getContentPane().add(canvas); //need to be after initialize GL, to add canvas listener
+        addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 System.exit(0); // exit program when touch in X button
             }
         });
-        frame.setVisible(true);
         
+        getContentPane().setLayout(null);        
+        menu = new JPanel();
+        menu.setBackground(new Color(51, 204, 204));
+        menu.setBounds(650, 0, 150, 600);
+        getContentPane().add(menu);
+        
+        buttons(menu);       
+        {
+        	list = new JList<Model>();
+        	
+        	menu.add(list);
+        }
+       
+        setVisible(true);        
 	}
 	
-	private void initGL(){
-		profile = GLProfile.get(GLProfile.GL2);
-		capabilities = new GLCapabilities(profile);
-        canvas = new GLCanvas(capabilities);
-        canvas.addGLEventListener(this);
+	private void buttons (JPanel panel) {
+		btnTriangulo = new JButton("Triangulo");
+        btnTriangulo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				createTriangulo();				
+			}
+		});
         
-        FPSAnimator animator = new FPSAnimator(canvas, FPS);
-		animator.start();
+        btnQuadrado = new JButton("Quadrado");
+        
+        
+        panel.add(btnTriangulo);
+        panel.add(btnQuadrado);
+	        
+	}
+	
+	private void initGL(int width, int height) {
+		profile = GLProfile.get(GLProfile.GL2);
+		capabilities = new GLCapabilities(profile);	
+		
+		canvas = new GLCanvas(capabilities);
+        canvas.addGLEventListener(this);
+        canvas.addMouseListener(this);
+        canvas.addMouseMotionListener(this);
+        canvas.setBounds(0, 0, width - 150, height);
+               
+        animator = new FPSAnimator(canvas, FPS);
 	}
 	
 	private void configViewport(GL2 gl, GLU glu, int width, int height) {
@@ -124,45 +179,67 @@ public class Window2D implements GLEventListener{
 	
 	public void render(GL2 gl, GLU glu, GLAutoDrawable drawable) {
 		
-		
-		
 		gl.glClearColorIi(0, 1, 0, 0);
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT); // limpa a tela
 		
-		Triangulo t = (Triangulo) polygons.get(2);
-		t.draw(gl, glu);
-		
-		Triangulo t2 = (Triangulo) polygons.get(1);
-		t2.draw(gl, glu);
-		t2.setAnimated(true);
-		
-		
-		//t.setAnimated(true);
-		
-//		
-//		
-//		for (Model model : polygons) {
-//			model.draw(gl, glu);
-//			model.setAnimated(true);
-//		}
-//		
-		
-			
+		for (Model model : polygons) {
+			model.draw(gl, glu);
+			model.setAnimated(true);
+		}		
 		
 		gl.glFlush();
+		
 	}
-	
-	public void objetos() {
-		Triangulo t = new Triangulo(new Point2D(10, 10), new Point2D(20, 10), new Point2D(15, 30));
-		Triangulo t2 = new Triangulo(new Point2D(100, 100), new Point2D(200, 100), new Point2D(100, 250));
-		Triangulo t3 = new Triangulo(new Point2D(200, 100), new Point2D(400, 100), new Point2D(300, 200));
-		
+	int x = 10;
+	public void createTriangulo() {
+		Triangulo t = new Triangulo(new Point2D(x, 250), new Point2D(x + 100, 250), new Point2D(x + 50, 350), 2);
 		polygons.add(t);
-		polygons.add(t2);
-		polygons.add(t3);
+		x += 100;
+		canvas.display();
 		
-		
-		System.out.println(t.getCenter().getX() + " " + t.getCenter().getY());
 	}
 
+	@Override
+	public void mouseDragged(MouseEvent e) 
+	{
+		System.out.println("mouseDragged");
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) 
+	{
+		//System.out.println("");
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) 
+	{
+		System.out.println("mouseClicked");
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) 
+	{
+		//setMouse(e);
+		//canvas.display();
+		System.out.println("mousePressed");
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) 
+	{
+		System.out.println("mouseReleased");
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) 
+	{
+		System.out.println("mouseEntered");
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) 
+	{
+		System.out.println("mouseExited");
+	}
 }

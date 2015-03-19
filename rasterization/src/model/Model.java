@@ -1,9 +1,10 @@
 package model;
 
 import javax.media.opengl.GL2;
+import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 
-public abstract class Model {
+public abstract class Model implements GLEventListener{
 
 	private boolean isAnimated;
 	
