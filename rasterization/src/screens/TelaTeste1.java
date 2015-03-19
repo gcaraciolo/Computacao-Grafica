@@ -53,7 +53,7 @@ public class TelaTeste1 extends JoglEventListener {
 		gl.glLoadIdentity();
 		super.getGlu().gluOrtho2D(0.0, 400.0, 0.0, 300.0);
 		
-		new Point2D(200, 110).draw(gl);
+		new Point2D(200, 110).draw(gl, null);
 		
 		//gl.glRectf(0.0f, 0.0f, 200.0f, 100.0f);
 		

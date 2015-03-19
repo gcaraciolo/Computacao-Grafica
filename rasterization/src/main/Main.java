@@ -1,6 +1,7 @@
 package main;
 
-import refactoring.Window;
+import refactoring2.Window;
+
 
 /**
  * UNICAP

@@ -1,5 +1,6 @@
-package refactoring;
+package refactoring2;
 
+import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -7,6 +8,10 @@ import java.awt.event.WindowEvent;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
+import javax.swing.SwingUtilities;
+
+import main.GameWindow;
+import model.ShaderTest;
 
 public class Window {
 	//GL
@@ -53,8 +58,12 @@ public class Window {
 		capabilities = new GLCapabilities(profile);
         canvas = new GLCanvas(capabilities);   
         
-        View view = new View(canvas, null, null, width, height);
-			
+        //View view = new View(canvas, null, null, width, height);
+		GameWindow gw = new GameWindow(canvas, null, null, width, height);
+        
+       
+      
 	}
 
+	
 }

@@ -64,17 +64,7 @@ public class View implements GLEventListener,
 		
 		if (glu == null) {
 			glu = new GLU();
-		}
-		
-		gl.glGetIntegerv(GL.GL_VIEWPORT, viewport, 0); //coordinates of screen
-		gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelview, 0);
-		gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projection, 0);
-		
-		gl.glViewport(0, 0, width, height);
-		gl.glMatrixMode(GL2.GL_PROJECTION);
-		gl.glLoadIdentity();
-		glu.gluOrtho2D(0.0, (float)width, 0.0, (float)height);	
-	
+		}	
 	}
 	
 	@Override
@@ -85,10 +75,16 @@ public class View implements GLEventListener,
 									  int height) 
 	{
 		GL2 gl = drawable.getGL().getGL2();
-		System.out.println("reshap");	
-	
-
+		System.out.println("reshap");
 		
+		gl.glGetIntegerv(GL.GL_VIEWPORT, viewport, 0); //coordinates of screen
+		gl.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelview, 0);
+		gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projection, 0);
+		
+		gl.glViewport(0, 0, width, height);
+		gl.glMatrixMode(GL2.GL_PROJECTION);
+		gl.glLoadIdentity();
+		glu.gluOrtho2D(0.0, (float)width, 0.0, (float)height);		
 		
 	}
 	
@@ -97,7 +93,7 @@ public class View implements GLEventListener,
 		GL2 gl = drawable.getGL().getGL2();
 		System.out.println("display");
 		
-		gl.glRectf(10.0f, 10.0f, 790.0f, 590.0f);
+		gl.glRectf(10.0f, 10.0f, 790.0f, 570.0f);
 		
 		gl.glFlush();
 	}

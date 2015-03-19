@@ -1,6 +1,7 @@
 package model;
 
 import javax.media.opengl.GL2;
+import javax.media.opengl.glu.GLU;
 
 public class Point2D extends Model {
 	private float x;
@@ -28,7 +29,7 @@ public class Point2D extends Model {
 	}
 
 	@Override
-	public void draw(GL2 gl) {
+	public void draw(GL2 gl, GLU glu) {
 		gl.glBegin (GL2.GL_POINTS);
 		
 		gl.glPointParameteri(GL2.GL_POINT_SPRITE_COORD_ORIGIN, GL2.GL_LOWER_LEFT);

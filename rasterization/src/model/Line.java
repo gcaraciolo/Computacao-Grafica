@@ -1,6 +1,7 @@
 package model;
 
 import javax.media.opengl.GL2;
+import javax.media.opengl.glu.GLU;
 
 public class Line extends Model{
 
@@ -19,7 +20,7 @@ public class Line extends Model{
 	}
 	
 	@Override
-	public void draw(GL2 gl) {
+	public void draw(GL2 gl, GLU glu) {
 		
 		gl.glBegin( GL2.GL_LINES );
 			if (this.color != null) { 

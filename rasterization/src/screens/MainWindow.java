@@ -90,7 +90,7 @@ public class MainWindow extends JoglEventListener {
 		          System.out.println("Coordinates at cursor are (" + x + ", " + y + ")");
 		          
 		          
-		          new Point2D(x, y).draw(gl);
+		          new Point2D(x, y).draw(gl, glu);
 	
 		          break;
 		        case MouseEvent.BUTTON2:
