@@ -29,6 +29,12 @@ import model.Point2D;
 import model.Triangulo;
 
 import com.jogamp.opengl.util.FPSAnimator;
+import java.awt.FlowLayout;
+import javax.swing.JTabbedPane;
+import java.awt.event.MouseAdapter;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.JRadioButton;
 
 public class Window2D extends JFrame implements GLEventListener, 
 												  MouseListener, 
@@ -106,31 +112,66 @@ public class Window2D extends JFrame implements GLEventListener,
 		
 		//frame = new Frame(title);
         setSize(800, 600);
-        getContentPane().add(canvas); //need to be after initialize GL, to add canvas listener
+        getContentPane().setLayout(null);
+        getContentPane().add(canvas);
+        
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.CYAN);
+        panel.setBounds(650, 0, 150, 600);
+        getContentPane().add(panel);
+        panel.setLayout(null);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 System.exit(0); // exit program when touch in X button
             }
         });
+        setVisible(true);     
+        buttons(panel);
         
-        getContentPane().setLayout(null);        
-        menu = new JPanel();
-        menu.setBackground(new Color(51, 204, 204));
-        menu.setBounds(650, 0, 150, 600);
-        getContentPane().add(menu);
+        JLabel lblX = new JLabel("X");
+        lblX.setBounds(16, 93, 15, 16);
+        panel.add(lblX);
         
-        buttons(menu);       
-        {
-        	list = new JList<Model>();
-        	
-        	menu.add(list);
-        }
-       
-        setVisible(true);        
+        JLabel lblY = new JLabel("Y");
+        lblY.setBounds(16, 116, 15, 16);
+        panel.add(lblY);
+        
+        JLabel lblAngulo = new JLabel("° ");
+        lblAngulo.setBounds(16, 144, 15, 16);
+        panel.add(lblAngulo);
+        
+        txtX = new JTextField();
+        txtX.setBounds(35, 93, 40, 16);
+        panel.add(txtX);
+        txtX.setColumns(10);
+        
+        txtY = new JTextField();
+        txtY.setColumns(10);
+        txtY.setBounds(35, 116, 40, 16);
+        panel.add(txtY);
+        
+        txtAngulo = new JTextField();
+        txtAngulo.setColumns(10);
+        txtAngulo.setBounds(35, 144, 40, 16);
+        panel.add(txtAngulo);
+        
+        rdbtnNewRadioButton = new JRadioButton("");
+        rdbtnNewRadioButton.setBounds(80, 93, 30, 16);
+        panel.add(rdbtnNewRadioButton);
+        
+        radioButton = new JRadioButton("");
+        radioButton.setBounds(81, 116, 30, 16);
+        panel.add(radioButton);
+        
+        btnMakeTransformation = new JButton("Aplicar");
+        btnMakeTransformation.setBounds(16, 172, 117, 29);
+        panel.add(btnMakeTransformation);
 	}
 	
 	private void buttons (JPanel panel) {
 		btnTriangulo = new JButton("Triangulo");
+		btnTriangulo.setLocation(6, 30);
+		btnTriangulo.setSize(138, 29);
         btnTriangulo.addActionListener(new ActionListener() {
 			
 			@Override
@@ -138,8 +179,11 @@ public class Window2D extends JFrame implements GLEventListener,
 				createTriangulo();				
 			}
 		});
+        btnTriangulo.setVisible(true);
         
         btnQuadrado = new JButton("Quadrado");
+        btnQuadrado.setLocation(6, 57);
+        btnQuadrado.setSize(138, 29);
         
         
         panel.add(btnTriangulo);
@@ -152,10 +196,10 @@ public class Window2D extends JFrame implements GLEventListener,
 		capabilities = new GLCapabilities(profile);	
 		
 		canvas = new GLCanvas(capabilities);
+		canvas.setBounds(395, 10, 0, 0);
         canvas.addGLEventListener(this);
         canvas.addMouseListener(this);
         canvas.addMouseMotionListener(this);
-        canvas.setBounds(0, 0, width - 150, height);
                
         animator = new FPSAnimator(canvas, FPS);
 	}
@@ -191,6 +235,12 @@ public class Window2D extends JFrame implements GLEventListener,
 		
 	}
 	int x = 10;
+	private JTextField txtX;
+	private JTextField txtY;
+	private JTextField txtAngulo;
+	private JRadioButton rdbtnNewRadioButton;
+	private JRadioButton radioButton;
+	private JButton btnMakeTransformation;
 	public void createTriangulo() {
 		Triangulo t = new Triangulo(new Point2D(x, 250), new Point2D(x + 100, 250), new Point2D(x + 50, 350), 2);
 		polygons.add(t);
