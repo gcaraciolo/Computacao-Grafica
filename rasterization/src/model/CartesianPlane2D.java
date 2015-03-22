@@ -1,7 +1,5 @@
 package model;
 
-import java.awt.event.MouseEvent;
-
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
@@ -28,9 +26,8 @@ public class CartesianPlane2D extends Model{
 
 	@Override
 	public void draw(GL2 gl, GLU glu) {
-		abscissa.draw(gl, glu);
-		ordered.draw(gl, glu);
-		gl.glFlush();
+		abscissa.draw(gl, glu);		
+		ordered.draw(gl, glu);		
 	}
 	
 	public void drawOcteto(GL2 gl, GLU glu) {

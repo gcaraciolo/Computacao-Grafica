@@ -25,14 +25,17 @@ public class Line extends Model{
 	@Override
 	public void draw(GL2 gl, GLU glu) {
 		
+		gl.glPushMatrix();
+		gl.glLoadIdentity();	
 		gl.glBegin( GL2.GL_LINES );
-			if (this.color != null) { 
-				gl.glColor3f(this.color.getR(), this.color.getG(), this.color.getB());
-			}
+//			if (this.color != null) { 
+//				gl.glColor3f(this.color.getR(), this.color.getG(), this.color.getB());
+//			}
 			gl.glVertex3f( this.p1.getX(), this.p1.getY(), 0);	    		  
 			gl.glVertex3f( this.p2.getX(), this.p2.getY(), 0);
-	    gl.glEnd();
-	    		
+		gl.glEnd();
+		gl.glPopAttrib();
+		
 	}
 
 	@Override

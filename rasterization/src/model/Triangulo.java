@@ -24,6 +24,14 @@ public class Triangulo extends Model{
 	private int ID;
 	private Point2D newPoint;
 	
+	public Triangulo(int ID) {
+		this.p1 = new Point2D(0, 0);
+		this.p2 = new Point2D(100, 0);
+		this.p3 = new Point2D(50, 100);
+		this.ID = ID;
+		updateCenter();
+	}
+	
 	
 	public Triangulo(Point2D p1, Point2D p2, Point2D p3, int ID) {
 		this.p1 = p1;
@@ -126,7 +134,10 @@ public class Triangulo extends Model{
 				}
 				break;
 			case 2:
-				
+				if (gl != null) {
+					gl.glScalef(operation.getX(), operation.getY(), 0);		
+					newPoint = new Point2D(operation.getX(), operation.getY());
+				}
 				break;
 			case 3:
 				if (gl != null) {
@@ -135,8 +146,8 @@ public class Triangulo extends Model{
 					
 					//jogar imagem para origem
 					gl.glEnable(GL2.GL_NORMALIZE);
-					gl.glScalef(operation.getX(), operation.getY(), 0);		
-					newPoint = new Point2D(operation.getX(), operation.getY());
+					gl.glScalef(- 1, - 1, 0);		
+				//	newPoint = new Point2D(operation.getX(), operation.getY());
 				}
 				break;
 			case 4:

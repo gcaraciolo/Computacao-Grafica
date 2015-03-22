@@ -28,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import model.CartesianPlane2D;
 import model.Model;
 import model.Point2D;
 import model.Triangulo;
@@ -111,6 +112,7 @@ public class Window2D extends JFrame implements GLEventListener
 	public void init(GLAutoDrawable drawable) 
 	{
 		GL2 gl = drawable.getGL().getGL2();
+		polygons.add(new CartesianPlane2D(0, 400, 400));
 
 	}
 
@@ -308,6 +310,15 @@ public class Window2D extends JFrame implements GLEventListener
 
 	private void configViewport(GL2 gl, GLU glu, int width, int height) {
 
+		int lastLeftX, lastRightX;
+		int lastBottomY, lastTopY;
+		
+		lastRightX = width / 2;
+		lastLeftX = - lastRightX;
+		
+		lastTopY = height / 2;
+		lastBottomY = - lastTopY;
+		
 		int[] viewport = new int[4];
 		double[] modelview = new double[16];
 		double[] projection = new double[16];
@@ -318,8 +329,8 @@ public class Window2D extends JFrame implements GLEventListener
 		gl.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projection, 0);
 
 		gl.glViewport(0, 0, width, height);
-		gl.glMatrixMode(GL2.GL_PROJECTION);
-		glu.gluOrtho2D(0.0, (float)width, 0.0, (float)height);		
+		gl.glMatrixMode(GL2.GL_PROJECTION);		
+		glu.gluOrtho2D(lastLeftX, (float)lastRightX, lastBottomY, (float)lastTopY); // coordinates.
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 	}
 
@@ -339,7 +350,8 @@ public class Window2D extends JFrame implements GLEventListener
 
 	public void createTriangulo() {
 		int x = 200, y = 100;
-		Triangulo t = new Triangulo(new Point2D(x, y + 150), new Point2D(x + 100, y + 150), new Point2D(x + 50, y + 250), polygonNumber++);
+		//Triangulo t = new Triangulo(new Point2D(x, y + 150), new Point2D(x + 100, y + 150), new Point2D(x + 50, y + 250), polygonNumber++);
+		Triangulo t = new Triangulo(polygonNumber++);
 		polygons.add(t);
 		x += 100;
 		canvas.display();
@@ -358,7 +370,7 @@ public class Window2D extends JFrame implements GLEventListener
 
 	private void addTransformation() {
 		
-		boolean angulo = false;
+		boolean angulo = false, reflexao = false;
 		StringBuilder transformation = new StringBuilder();
 		Integer transformationSelected = cbTransformations.getSelectedIndex();
 		Operation operation = new Operation(transformationSelected);
@@ -368,26 +380,29 @@ public class Window2D extends JFrame implements GLEventListener
 				return;
 			else
 				angulo = true;
+		} else if (transformationSelected == 2) {
+			reflexao = true;
 		} else if (txtX.getText().equals("") && txtY.getText().equals("")) {
 			return;
 		}
 		
+		transformation.append(operationsText.get(transformationSelected).substring(0, 2) + ": (" ); 
+		
 		if (angulo) {	
-			transformation.append(operationsText.get(transformationSelected).substring(0, 2) + ": " );
-	
-			transformation.append("(");
+			
 			
 			if (!txtAngulo.getText().equals("")) transformation.append("* = " + txtAngulo.getText());
 	
 			transformation.append(")");
 	
-			showOperations.setText(showOperations.getText() +  transformation.toString() + "\n");		
+			showOperations.setText(showOperations.getText() +  transformation.toString() + "\n");
+			
+		} else if (reflexao) {
+			
+			operations.add(operation);
+			
 		} else {
 			
-	
-			transformation.append(operationsText.get(transformationSelected).substring(0, 2) + ": " );
-	
-			transformation.append("(");
 			
 			if (!txtX.getText().equals("")) { 
 				transformation.append("x = " + txtX.getText());
