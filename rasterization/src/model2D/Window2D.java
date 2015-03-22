@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import model.CartesianPlane2D;
@@ -72,6 +73,8 @@ public class Window2D extends JFrame implements GLEventListener
 	private JLabel lblX;    
 	private JLabel lblY;    
 	private JLabel lblAngulo;
+	private JRadioButton rbtnX;
+	private JRadioButton rbtnY;
 	private JComboBox<String> cbTransformations;
 	private TextArea showOperations;
 
@@ -171,6 +174,7 @@ public class Window2D extends JFrame implements GLEventListener
 		createLabels();
 		createTextFields();
 		createTextAreaShowOperations();
+		createRadioButtons();
 
 		//hidden angulo
 		lblAngulo.setVisible(false);
@@ -189,6 +193,24 @@ public class Window2D extends JFrame implements GLEventListener
 					
 					lblY.setVisible(false);
 					txtY.setVisible(false);
+					
+					rbtnX.setVisible(false);
+					rbtnY.setVisible(false);
+				} else if ( cbTransformations.getSelectedIndex() == 2) {					
+					rbtnX.setVisible(true);
+					rbtnY.setVisible(true);
+					
+					lblX.setVisible(true);
+					txtX.setVisible(false);
+					
+					
+					lblY.setVisible(true);
+					txtY.setVisible(false);
+					
+					//hidden angulo
+					lblAngulo.setVisible(false);
+					txtAngulo.setVisible(false);
+					
 				} else {
 					//hidden angulo
 					lblAngulo.setVisible(false);
@@ -200,6 +222,9 @@ public class Window2D extends JFrame implements GLEventListener
 					
 					lblY.setVisible(true);
 					txtY.setVisible(true);
+					
+					rbtnX.setVisible(false);
+					rbtnY.setVisible(false);
 				}
 			}
 		});
@@ -295,6 +320,21 @@ public class Window2D extends JFrame implements GLEventListener
 		panel.add(txtAngulo);
 
 	}
+	
+	private void createRadioButtons() {
+		rbtnX = new JRadioButton();
+		rbtnX.setBounds(85, 93, 115, 16);
+		
+		rbtnY = new JRadioButton();
+		rbtnY.setBounds(85,116, 115, 16);
+		
+		rbtnX.setVisible(false);
+		rbtnY.setVisible(false);
+
+		
+		panel.add(rbtnX);
+		panel.add(rbtnY);
+	}
 
 	private void initGL(int width, int height) {
 		profile = GLProfile.get(GLProfile.GL2);
@@ -341,7 +381,7 @@ public class Window2D extends JFrame implements GLEventListener
 
 		for (Model model : polygons) {
 			model.draw(gl, glu);
-			model.setAnimated(true);
+			//model.setAnimated(true);
 		}		
 
 		gl.glFlush();
@@ -395,19 +435,31 @@ public class Window2D extends JFrame implements GLEventListener
 	
 			transformation.append(")");
 	
-			showOperations.setText(showOperations.getText() +  transformation.toString() + "\n");
 			
 		} else if (reflexao) {
 			
+			if (rbtnX.isSelected()) {
+				operation.setX(-1f);
+				transformation.append("x");
+				if (rbtnY.isSelected()) transformation.append(", ");
+			}
+			
+			if (rbtnY.isSelected()) {
+				operation.setY(-1f);
+				transformation.append("y");
+			}
+			
 			operations.add(operation);
+			
+			transformation.append(")");
 			
 		} else {
 			
 			
-			if (!txtX.getText().equals("")) { 
-				transformation.append("x = " + txtX.getText());
+			if (!txtX.getText().equals("")) { 				
 				try {
 					operation.setX(Float.parseFloat(txtX.getText().toString()));
+					transformation.append("x = " + txtX.getText());
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "numero no X");
 				}
@@ -415,10 +467,10 @@ public class Window2D extends JFrame implements GLEventListener
 			} else {
 				operation.setX(0f);
 			}
-			if (!txtY.getText().equals("")) {
-				transformation.append("y = " + txtY.getText());
+			if (!txtY.getText().equals("")) {				
 				try {
 					operation.setY(Float.parseFloat(txtY.getText().toString()));
+					transformation.append("y = " + txtY.getText());
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "numero no Y");
 				}
@@ -431,8 +483,9 @@ public class Window2D extends JFrame implements GLEventListener
 	
 			transformation.append(")");
 	
-			showOperations.setText(showOperations.getText() +  transformation.toString() + "\n");
+			
 		}
+		showOperations.setText(showOperations.getText() +  transformation.toString() + "\n");
 	}
 
 }
