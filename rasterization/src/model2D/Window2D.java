@@ -453,8 +453,7 @@ public class Window2D extends JFrame implements GLEventListener
 			
 			transformation.append(")");
 			
-		} else {
-			
+		} else {			
 			
 			if (!txtX.getText().equals("")) { 				
 				try {

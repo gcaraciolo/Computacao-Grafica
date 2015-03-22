@@ -23,6 +23,11 @@ public class Triangulo extends Model{
 	private Point2D center;
 	private int ID;
 	private Point2D newPoint;
+	private boolean translate = false, 
+					  rotacao = false, 
+					  reflexao = false, 
+					  escala = false, 
+					  cisalhamento = false;
 	
 	public Triangulo(int ID) {
 		this.p1 = new Point2D(0, 0);
@@ -87,14 +92,41 @@ public class Triangulo extends Model{
 	public void update() {
 		if (newPoint == null) return;
 		
-		p1.setX(p1.getX() + newPoint.getX());
-		p1.setY(p1.getY() + newPoint.getY());
-		
-		p2.setX(p2.getX() + newPoint.getX());
-		p2.setY(p2.getY() + newPoint.getY());
-		
-		p3.setX(p3.getX() + newPoint.getX());
-		p3.setY(p3.getY() + newPoint.getY());
+		if (translate){
+			p1.setX(p1.getX() + newPoint.getX());
+			p1.setY(p1.getY() + newPoint.getY());
+			
+			p2.setX(p2.getX() + newPoint.getX());
+			p2.setY(p2.getY() + newPoint.getY());
+			
+			p3.setX(p3.getX() + newPoint.getX());
+			p3.setY(p3.getY() + newPoint.getY());
+		 
+			translate = false;
+		} else if (rotacao) {
+			
+			rotacao = false;
+		} else if (reflexao) {
+			
+			p1.setX(p1.getX() * newPoint.getX());
+			p1.setY(p1.getY() * newPoint.getY());
+			
+			p2.setX(p2.getX() * newPoint.getX());
+			p2.setY(p2.getY() * newPoint.getY());
+			
+			p3.setX(p3.getX() * newPoint.getX());
+			p3.setY(p3.getY() * newPoint.getY());
+			
+			reflexao = false;
+		} else if (escala) {
+			
+			
+			
+			escala = false;
+		} else if (cisalhamento) {
+			
+			cisalhamento = false;
+		}
 		
 		newPoint = null;
 	}
@@ -123,35 +155,43 @@ public class Triangulo extends Model{
 			switch (operation.getType()) {
 			case 0: //translacao
 				if (gl != null) {
+					translate = true;
 					gl.glTranslatef(operation.getX(), operation.getY(), 0);		
 					newPoint = new Point2D(operation.getX(), operation.getY());
 				}
 				break;
 			case 1:
 				if (gl != null) {
+					rotacao = true;
 					gl.glTranslatef(operation.getX(), operation.getY(), 0);		
 					newPoint = new Point2D(operation.getX(), operation.getY());
 				}
 				break;
 			case 2:
 				if (gl != null) {
-					gl.glScalef(operation.getX(), operation.getY(), 0);		
+					reflexao = true;
+					if (operation.getX() == 0) operation.setX(1f);
+					if (operation.getY() == 0) operation.setY(1f);
+					
+					
+					//todo -> reflexao ao contrario.
+					gl.glScalef(operation.getX(), operation.getY(), 1);		
 					newPoint = new Point2D(operation.getX(), operation.getY());
 				}
 				break;
 			case 3:
-				if (gl != null) {
-					if (operation.getX() == 0) operation.setX(1f);
-					if (operation.getY() == 0) operation.setY(1f);
-					
-					//jogar imagem para origem
+				if (gl != null) {									
+					escala = true;
+					//todo -> jogar imagem para origem antes
 					gl.glEnable(GL2.GL_NORMALIZE);
-					gl.glScalef(- 1, - 1, 0);		
+					gl.glScalef(operation.getX(), operation.getY(), 1);		
 				//	newPoint = new Point2D(operation.getX(), operation.getY());
 				}
 				break;
 			case 4:
-		
+				if (gl != null) {									
+					cisalhamento = true;
+				}
 				break;
 
 			default:

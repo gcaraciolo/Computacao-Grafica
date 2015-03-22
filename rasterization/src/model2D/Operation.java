@@ -23,6 +23,8 @@ public class Operation {
 		
 	public Operation(Integer type) {
 		this.type = type;
+		this.x = 0f;
+		this.y = 0f;
 	}
 	
 	public Operation(Integer type, Float x, Float y) {
@@ -34,6 +36,8 @@ public class Operation {
 	public Operation(Integer type, Float angulo) {
 		this.type = type;
 		this.angulo = angulo;
+		this.x = 0f;
+		this.y = 0f;
 	}
 	
 	public Float getX() {
