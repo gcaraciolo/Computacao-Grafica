@@ -439,13 +439,13 @@ public class Window2D extends JFrame implements GLEventListener
 		} else if (reflexao) {
 			
 			if (rbtnX.isSelected()) {
-				operation.setX(-1f);
+				operation.setY(-1f); //ordem inversa
 				transformation.append("x");
 				if (rbtnY.isSelected()) transformation.append(", ");
 			}
 			
 			if (rbtnY.isSelected()) {
-				operation.setY(-1f);
+				operation.setX(-1f); //ordem inversa
 				transformation.append("y");
 			}
 			
