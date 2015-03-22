@@ -67,4 +67,10 @@ public class Point2D extends Model {
 		
 	}
 
+	@Override
+	public void makeTransformation(GL2 gl, GLU glu) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

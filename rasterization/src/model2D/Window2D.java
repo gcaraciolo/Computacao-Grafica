@@ -9,6 +9,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -23,8 +24,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import model.Model;
@@ -32,8 +33,6 @@ import model.Point2D;
 import model.Triangulo;
 
 import com.jogamp.opengl.util.FPSAnimator;
-
-import javax.swing.JTextPane;
 
 public class Window2D extends JFrame implements GLEventListener						   
 {
@@ -57,6 +56,7 @@ public class Window2D extends JFrame implements GLEventListener
 	FPSAnimator animator;
 
 	private ArrayList<Model> polygons;
+	private int polygonNumber;
 	private JPanel menu;
 	private JButton btnTriangulo;
 	private JButton btnQuadrado;
@@ -75,13 +75,19 @@ public class Window2D extends JFrame implements GLEventListener
 	private TextArea showOperations;
 
 	//lista de valores de operacao
-	private HashMap<Integer, String> operations;
+	private HashMap<Integer, String> operationsText;
+	
+	//<tipo da operacao, x, y, angulo>
+	
+	private List<Operation> operations;
 
 	public Window2D(String title, int width, int height) {
 		setBackground(Color.YELLOW);
 		this.title = title;
 		this.glu = new GLU();
 		this.polygons = new ArrayList<>();
+		
+		operations = new ArrayList<>();
 
 		initFrame(width, height);		
 	}
@@ -136,15 +142,15 @@ public class Window2D extends JFrame implements GLEventListener
 		cbTransformations = new JComboBox<String>();
 		cbTransformations.setBounds(6, 226, 138, 27);
 
-		operations = new HashMap<>();
-		operations.put(0, "Translação");
-		operations.put(1, "Rotação");
-		operations.put(2, "Reflexão");
-		operations.put(3, "Escala");
-		operations.put(4, "Cisalhamento");
+		operationsText = new HashMap<>();
+		operationsText.put(0, "Translação");
+		operationsText.put(1, "Rotação");
+		operationsText.put(2, "Reflexão");
+		operationsText.put(3, "Escala");
+		operationsText.put(4, "Cisalhamento");
 
-		for (Integer operation : operations.keySet()) {
-			cbTransformations.addItem(operation + " " + operations.get(operation));
+		for (Integer operation : operationsText.keySet()) {
+			cbTransformations.addItem(operation + " " + operationsText.get(operation));
 		}
 
 
@@ -330,11 +336,10 @@ public class Window2D extends JFrame implements GLEventListener
 		gl.glFlush();
 
 	}
-	int x = 10;
-
 
 	public void createTriangulo() {
-		Triangulo t = new Triangulo(new Point2D(x, 250), new Point2D(x + 100, 250), new Point2D(x + 50, 350), 2);
+		int x = 200, y = 100;
+		Triangulo t = new Triangulo(new Point2D(x, y + 150), new Point2D(x + 100, y + 150), new Point2D(x + 50, y + 250), polygonNumber++);
 		polygons.add(t);
 		x += 100;
 		canvas.display();
@@ -345,16 +350,20 @@ public class Window2D extends JFrame implements GLEventListener
 		//make transformation in the last object on polygons list
 		if (polygons.size() == 0) return;
 		Model m = polygons.get(polygons.size() - 1);
-
-		
-
+		m.setOperations(operations);		
+		canvas.display();
+		operations = new ArrayList<Operation>();
+		showOperations.setText(""); // clean operationsText
 	}
 
 	private void addTransformation() {
 		
 		boolean angulo = false;
+		StringBuilder transformation = new StringBuilder();
+		Integer transformationSelected = cbTransformations.getSelectedIndex();
+		Operation operation = new Operation(transformationSelected);
 
-		if (cbTransformations.getSelectedIndex() == 1){
+		if (transformationSelected == 1){
 			if (txtAngulo.getText().equals(""))
 				return;
 			else
@@ -363,11 +372,8 @@ public class Window2D extends JFrame implements GLEventListener
 			return;
 		}
 		
-		if (angulo) {
-			StringBuilder transformation = new StringBuilder();
-			Integer transformationSelected = cbTransformations.getSelectedIndex();
-	
-			transformation.append(operations.get(transformationSelected).substring(0, 2) + ": " );
+		if (angulo) {	
+			transformation.append(operationsText.get(transformationSelected).substring(0, 2) + ": " );
 	
 			transformation.append("(");
 			
@@ -377,19 +383,36 @@ public class Window2D extends JFrame implements GLEventListener
 	
 			showOperations.setText(showOperations.getText() +  transformation.toString() + "\n");		
 		} else {
-			StringBuilder transformation = new StringBuilder();
-			Integer transformationSelected = cbTransformations.getSelectedIndex();
+			
 	
-			transformation.append(operations.get(transformationSelected).substring(0, 2) + ": " );
+			transformation.append(operationsText.get(transformationSelected).substring(0, 2) + ": " );
 	
 			transformation.append("(");
 			
 			if (!txtX.getText().equals("")) { 
 				transformation.append("x = " + txtX.getText());
+				try {
+					operation.setX(Float.parseFloat(txtX.getText().toString()));
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "numero no X");
+				}
 				if (!txtY.getText().equals("")) transformation.append(", ");
+			} else {
+				operation.setX(0f);
 			}
-			if (!txtY.getText().equals("")) transformation.append("y = " + txtY.getText());
+			if (!txtY.getText().equals("")) {
+				transformation.append("y = " + txtY.getText());
+				try {
+					operation.setY(Float.parseFloat(txtY.getText().toString()));
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "numero no Y");
+				}
+			} else {
+				operation.setY(0f);
+			}
 			
+						
+			operations.add(operation);
 	
 			transformation.append(")");
 	

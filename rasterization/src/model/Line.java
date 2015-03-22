@@ -60,6 +60,12 @@ public class Line extends Model{
 		
 	}
 
+	@Override
+	public void makeTransformation(GL2 gl, GLU glu) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 
