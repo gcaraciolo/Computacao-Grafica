@@ -8,7 +8,7 @@ public class Main {
 	public static int WINDOW_HEIGHT = 600;
 	
 	public static void main(String[] args) {
-		new Window2D("mundo2d", WINDOW_WIDHT, WINDOW_HEIGHT);		
+		new Window2D("Transformações 2D", WINDOW_WIDHT, WINDOW_HEIGHT);
 	}
 
 }

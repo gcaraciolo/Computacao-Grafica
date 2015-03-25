@@ -459,6 +459,8 @@ public class Window2D extends JFrame implements GLEventListener
 				// this check must be after the user put the data in the text field
 				try {
 					theta = Double.parseDouble(txtAngulo.getText().toString());	
+					//theta = Math.PI/ theta;
+					System.out.println(theta);
 				}catch (Exception e){
 					
 				}finally {	
