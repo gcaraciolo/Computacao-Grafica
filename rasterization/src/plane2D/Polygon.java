@@ -82,6 +82,16 @@ public abstract class Polygon  {
 
 		return matRot;
 	}
+	
+	private double[][] MatrixShear(double a, double b) {
+		double matRot[][] = new double[dim][dim];
+		matrix3x3SetIdentity(matRot);
+
+		matRot[1][0] = a; 
+		matRot[0][1] = b;
+
+		return matRot;
+	}
 
 	private double[][] MatrixTranslate(double tx, double ty) {
 		double matRot[][] = new double[dim][dim];
@@ -99,12 +109,8 @@ public abstract class Polygon  {
 		
 		double cos = Math.cos(Math.toRadians(theta));
 		double sin = Math.sin(Math.toRadians(theta));
-
-		DecimalFormat df = new DecimalFormat("#");
-		df.setMaximumFractionDigits(10);
-		cos = Double.parseDouble(df.format(cos));
-		sin = Double.parseDouble(df.format(sin));	
-
+		
+		cos = (float) Math.round(cos * 100) / 100; // for 90 and 270 degrees
 
 		double goOrigem[][] = MatrixTranslate(- pivot.x, - pivot.y);
 		double rot[][] = MatrixRotate(cos, sin);
@@ -130,6 +136,10 @@ public abstract class Polygon  {
 			if (y)  verts.get(k).y *= -1;
 		}
 
+	}
+	
+	protected void shear(double a, double b) {
+		matComposite =  MatrixShear(a, b);
 	}
 
 	public abstract void draw(GL2 gl, GLU glu);

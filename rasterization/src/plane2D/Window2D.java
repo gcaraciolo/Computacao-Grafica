@@ -52,7 +52,7 @@ public class Window2D extends JFrame implements GLEventListener
 	public static int FPS = 60;
 	FPSAnimator animator;
 
-	
+
 	private int polygonNumber;
 	private JPanel menu;
 	private JButton btnTriangulo;
@@ -78,8 +78,8 @@ public class Window2D extends JFrame implements GLEventListener
 	//<tipo da operacao, x, y, angulo>	
 	private List<Operation> operations;
 	private ArrayList<Polygon> polygons;
-	
-	
+
+
 	public Window2D(String title, int width, int height) {
 		setBackground(Color.YELLOW);
 		this.title = title;
@@ -180,43 +180,43 @@ public class Window2D extends JFrame implements GLEventListener
 				if ( cbTransformations.getSelectedIndex() == 1) { //angulo 
 					lblAngulo.setVisible(true);
 					txtAngulo.setVisible(true);
-									
+
 					lblX.setVisible(false);
 					txtX.setVisible(false);
-					
-					
+
+
 					lblY.setVisible(false);
 					txtY.setVisible(false);
-					
+
 					rbtnX.setVisible(false);
 					rbtnY.setVisible(false);
 				} else if ( cbTransformations.getSelectedIndex() == 2) {					
 					rbtnX.setVisible(true);
 					rbtnY.setVisible(true);
-					
+
 					lblX.setVisible(true);
 					txtX.setVisible(false);
-					
-					
+
+
 					lblY.setVisible(true);
 					txtY.setVisible(false);
-					
+
 					//hidden angulo
 					lblAngulo.setVisible(false);
 					txtAngulo.setVisible(false);
-					
+
 				} else {
 					//hidden angulo
 					lblAngulo.setVisible(false);
 					txtAngulo.setVisible(false);
-					
+
 					//show others
 					lblX.setVisible(true);
 					txtX.setVisible(true);
-					
+
 					lblY.setVisible(true);
 					txtY.setVisible(true);
-					
+
 					rbtnX.setVisible(false);
 					rbtnY.setVisible(false);
 				}
@@ -315,18 +315,18 @@ public class Window2D extends JFrame implements GLEventListener
 		panel.add(txtAngulo);
 
 	}
-	
+
 	private void createRadioButtons() {
 		rbtnX = new JRadioButton();
 		rbtnX.setBounds(85, 93, 115, 16);
-		
+
 		rbtnY = new JRadioButton();
 		rbtnY.setBounds(85,116, 115, 16);
-		
+
 		rbtnX.setVisible(false);
 		rbtnY.setVisible(false);
 
-		
+
 		panel.add(rbtnX);
 		panel.add(rbtnY);
 	}
@@ -347,13 +347,13 @@ public class Window2D extends JFrame implements GLEventListener
 
 		int lastLeftX, lastRightX;
 		int lastBottomY, lastTopY;
-		
+
 		lastRightX = width / 2;
 		lastLeftX = - lastRightX;
-		
+
 		lastTopY = height / 2;
 		lastBottomY = - lastTopY;
-		
+
 		int[] viewport = new int[4];
 		double[] modelview = new double[16];
 		double[] projection = new double[16];
@@ -394,38 +394,38 @@ public class Window2D extends JFrame implements GLEventListener
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-//		//make transformation in the last object on polygons list
-//		if (polygons.size() == 0) return;
-//		Model m = polygons.get(polygons.size() - 1);
-//		m.setOperations(operations);		
-//		canvas.display();
-//		operations = new ArrayList<Operation>();
-//		showOperations.setText(""); // clean operationsText
+		//		//make transformation in the last object on polygons list
+		//		if (polygons.size() == 0) return;
+		//		Model m = polygons.get(polygons.size() - 1);
+		//		m.setOperations(operations);		
+		//		canvas.display();
+		//		operations = new ArrayList<Operation>();
+		//		showOperations.setText(""); // clean operationsText
 	}
-	
+
 	private boolean hasX() {
 		if (txtX.getText().equals(""))
 			return false;
 		return true;			
 	}
-	
+
 	private boolean hasY() {
 		if (txtY.getText().equals(""))
 			return false;
 		return true;			
 	}
-	
+
 	private boolean hasTheta() {
 		if (txtAngulo.getText().equals(""))
 			return false;
 		return true;
 	}
-	
+
 	private void addTranslate() {
 		try {
 			Polygon p = polygons.get(polygons.size() - 1);			
 			if (p instanceof Triangulo) {
-				
+
 				Triangulo t = (Triangulo) p;
 				double tx = 0, ty = 0;
 
@@ -434,9 +434,9 @@ public class Window2D extends JFrame implements GLEventListener
 					tx = Double.parseDouble(txtX.getText().toString());
 					ty = Double.parseDouble(txtY.getText().toString());	
 				}catch (Exception e){
-					
+
 				}finally {	
-				
+
 					if (hasX() && hasY())  t.translate(tx, ty);
 					else if (hasX()) t.translate(tx, 0);
 					else if (hasY()) t.translate(0, ty);
@@ -447,12 +447,12 @@ public class Window2D extends JFrame implements GLEventListener
 			// nao há objetos na tela
 		}
 	}
-	
+
 	private void addRotate() {
 		try {
 			Polygon p = polygons.get(polygons.size() - 1);			
 			if (p instanceof Triangulo) {
-				
+
 				Triangulo t = (Triangulo) p;
 				double theta = 0;
 
@@ -462,9 +462,9 @@ public class Window2D extends JFrame implements GLEventListener
 					//theta = Math.PI/ theta;
 					System.out.println(theta);
 				}catch (Exception e){
-					
+
 				}finally {	
-				
+
 					if (hasTheta()) t.rotate(new WCPt2D(0, 0), theta);
 				}
 			}
@@ -473,12 +473,12 @@ public class Window2D extends JFrame implements GLEventListener
 			// nao há objetos na tela
 		}
 	}
-	
+
 	private void addScale() {
 		try {
 			Polygon p = polygons.get(polygons.size() - 1);			
 			if (p instanceof Triangulo) {
-				
+
 				Triangulo t = (Triangulo) p;
 				double sx = 0, sy = 0;
 
@@ -487,9 +487,9 @@ public class Window2D extends JFrame implements GLEventListener
 					sx = Double.parseDouble(txtX.getText().toString());
 					sy = Double.parseDouble(txtY.getText().toString());	
 				}catch (Exception e){
-					
+
 				}finally {	
-				
+
 					if (hasX() && hasY())  t.scale(new WCPt2D (0,0) ,sx, sy);
 					else if (hasX()) t.scale(new WCPt2D (0,0) ,sx, 1);
 					else if (hasY()) t.scale(new WCPt2D (0,0) ,1, sy);
@@ -500,12 +500,12 @@ public class Window2D extends JFrame implements GLEventListener
 			// nao há objetos na tela
 		}
 	}
-	
+
 	private void addReflexion() {
 		try {
 			Polygon p = polygons.get(polygons.size() - 1);			
 			if (p instanceof Triangulo) {
-				
+
 				Triangulo t = (Triangulo) p;				
 				t.reflexion(rbtnX.isSelected(), rbtnY.isSelected());
 			}
@@ -514,36 +514,62 @@ public class Window2D extends JFrame implements GLEventListener
 			// nao há objetos na tela
 		}
 	}
-	
+
+	private void addShear() {
+		try {
+			Polygon p = polygons.get(polygons.size() - 1);			
+			Triangulo t = (Triangulo) p;
+			double a = 0, b = 0;
+
+			// this check must be after the user put the data in the text field
+			try {
+				if (hasX())
+					a = Double.parseDouble(txtX.getText().toString());
+				if (hasY())
+					b = Double.parseDouble(txtY.getText().toString());	
+			}catch (Exception e){
+
+			}finally {	
+
+				if (hasX() && hasY())  t.shear(a, b);
+				else if (hasX()) t.shear(a, 0);
+				else if (hasY()) t.shear(0, b);
+			}
+		} catch(Exception e) {
+			// implementas exceptions
+			// nao há objetos na tela
+		}
+	}
+
 	private void addTrans() {
 		Integer transformationType = cbTransformations.getSelectedIndex();
 		switch (transformationType) {
-			case 0: //translate
-				addTranslate();
-				break;
-			case 1: //rotate
-				addRotate();
-				break;
-			case 2: //reflexion
-				addReflexion();
-				break;
-			case 3: //scale
-				addScale();
-				break;
-			case 4: //shar -> TODO
-				
-				break;
+		case 0: //translate
+			addTranslate();
+			break;
+		case 1: //rotate
+			addRotate();
+			break;
+		case 2: //reflexion
+			addReflexion();
+			break;
+		case 3: //scale
+			addScale();
+			break;
+		case 4: //shar -> TODO
+			addShear();
+			break;
 		}
-		
-	}
-	
-	
-	
 
-	
+	}
+
+
+
+
+
 
 	private void addTransformation() {
-		
+
 		boolean angulo = false, reflexao = false;
 		StringBuilder transformation = new StringBuilder();
 		Integer transformationSelected = cbTransformations.getSelectedIndex();
@@ -559,36 +585,36 @@ public class Window2D extends JFrame implements GLEventListener
 		} else if (txtX.getText().equals("") && txtY.getText().equals("")) {
 			return;
 		}
-		
+
 		transformation.append(operationsText.get(transformationSelected).substring(0, 2) + ": (" ); 
-		
+
 		if (angulo) {	
-			
-			
+
+
 			if (!txtAngulo.getText().equals("")) transformation.append("* = " + txtAngulo.getText());
-	
+
 			transformation.append(")");
-	
-			
+
+
 		} else if (reflexao) {
-			
+
 			if (rbtnX.isSelected()) {
 				operation.setY(-1f); //ordem inversa
 				transformation.append("x");
 				if (rbtnY.isSelected()) transformation.append(", ");
 			}
-			
+
 			if (rbtnY.isSelected()) {
 				operation.setX(-1f); //ordem inversa
 				transformation.append("y");
 			}
-			
+
 			operations.add(operation);
-			
+
 			transformation.append(")");
-			
+
 		} else {			
-			
+
 			if (!txtX.getText().equals("")) { 				
 				try {
 					operation.setX(Float.parseFloat(txtX.getText().toString()));
@@ -610,13 +636,13 @@ public class Window2D extends JFrame implements GLEventListener
 			} else {
 				operation.setY(0f);
 			}
-			
-						
+
+
 			operations.add(operation);
-	
+
 			transformation.append(")");
-	
-			
+
+
 		}
 		showOperations.setText(showOperations.getText() +  transformation.toString() + "\n");
 	}
