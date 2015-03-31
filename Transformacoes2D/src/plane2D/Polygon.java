@@ -92,8 +92,8 @@ public abstract class Polygon  {
 		double matRot[][] = new double[dim][dim];
 		matrix3x3SetIdentity(matRot);
 
-		matRot[1][0] = a; 
-		matRot[0][1] = b;
+		matRot[1][0] = b; 
+		matRot[0][1] = a;
 
 		return matRot;
 	}
